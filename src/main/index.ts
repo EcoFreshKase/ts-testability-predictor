@@ -1,4 +1,4 @@
-import { runFta } from "fta-cli";
+import { runFta } from "./lib/fta-cli-ts";
 
 console.log("Hello World");
 
