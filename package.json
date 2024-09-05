@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npx tsx src/main/index.ts",
     "test:all": "npx ts-mocha --type-check -p tsconfig.json src/test/**/*.ts",
-    "test:watch": "npx ts-mocha -w --watch-files -p tsconfig.json src/test/**/*.ts"
+    "test:watch": "npx ts-mocha -w --watch-files src/main/**/*.ts -p tsconfig.json src/test/**/*.ts"
   },
   "author": "Eco_Fresh_Kaese",
   "license": "ISC",
