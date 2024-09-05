@@ -17,6 +17,8 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "fta-cli": "^2.0.0"
+    "@types/tmp": "^0.2.6",
+    "fta-cli": "^2.0.0",
+    "tmp": "^0.2.3"
   }
 }
