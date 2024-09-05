@@ -4,11 +4,16 @@
   "description": "A tool to predict the testability of a TypeScript Project",
   "main": "index.js",
   "scripts": {
-    "start": "npx tsx src/index.ts"
+    "start": "npx tsx src/main/index.ts",
+    "test:all": "npx ts-mocha --type-check -p tsconfig.json src/test/**/*.ts",
+    "test:watch": "npx ts-mocha --watch-files -p tsconfig.json src/test/**/*.ts"
   },
   "author": "Eco_Fresh_Kaese",
   "license": "ISC",
   "devDependencies": {
+    "@types/expect": "^24.3.0",
+    "@types/mocha": "^10.0.7",
+    "ts-mocha": "^10.0.0",
     "typescript": "^5.5.4"
   },
   "dependencies": {
