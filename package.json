@@ -1,0 +1,17 @@
+{
+  "name": "ts-testability-predictor",
+  "version": "0.0.1",
+  "description": "A tool to predict the testability of a TypeScript Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx tsx src/index.ts"
+  },
+  "author": "Eco_Fresh_Kaese",
+  "license": "ISC",
+  "devDependencies": {
+    "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "fta-cli": "^2.0.0"
+  }
+}
