@@ -1,5 +1,5 @@
-import { runFta as runFtaOld } from "fta-cli";
+import { AnalyzedFile, runFta as runFtaOld } from "fta-cli";
 
-export function runFta(projectPath: string): Object {
+export function runFta(projectPath: string): AnalyzedFile[] {
   return runFtaOld(projectPath, { json: true });
 }
