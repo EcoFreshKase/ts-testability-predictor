@@ -1,5 +1,7 @@
+import { readdir, writeFile } from "fs/promises";
 import { runFta } from "./lib/fta-cli-ts";
-import { downloadProjects } from "./lib/projectUtils";
+import { downloadProjects, createResultDir } from "./lib/projectUtils";
+import { exit } from "process";
 
 let projects = [
   "https://github.com/EcoFreshKase/create-typescript-eco.git",
@@ -8,5 +10,28 @@ let projects = [
   "https://github.com/EcoFreshKase/broken-access-controll-test.git",
 ];
 
-let projectDir = downloadProjects(projects);
-console.log(projectDir);
+async function main() {
+  let downloadDir = downloadProjects(projects);
+  let resultsDir = await createResultDir(".");
+
+  let projectsAnalysis = [];
+  let projectDir = await downloadDir;
+
+  for (let project of await readdir(await projectDir)) {
+    const projectAnalysis = runFta(projectDir + "/" + project);
+
+    projectsAnalysis.push(
+      writeFile(
+        `${resultsDir}/${project}.json`,
+        JSON.stringify(projectAnalysis)
+      )
+    );
+  }
+
+  await Promise.all(projectsAnalysis).catch((err) => {
+    console.error("Error writing project analysis:", err);
+    exit(1);
+  });
+}
+
+main();
