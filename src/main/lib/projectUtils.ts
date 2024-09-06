@@ -1,4 +1,5 @@
 import { exec } from "child_process";
+import { mkdir } from "fs/promises";
 import { dirSync } from "tmp";
 import { promisify } from "util";
 
@@ -32,4 +33,25 @@ export async function downloadProjects(
   }
 
   return tmpDir.name;
+}
+
+/**
+ * Creates a result directory at the specified path.
+ * If the directory already exists, it appends a suffix "(1)" to the directory name and tries again.
+ * @param path - The path where the result directory should be created.
+ * @returns The path of the created result directory.
+ */
+export async function createResultDir(path: string) {
+  let resultsDir = `${path}/results`;
+  let dirCreated = false;
+  while (!dirCreated) {
+    await mkdir(resultsDir)
+      .then(() => {
+        dirCreated = true;
+      })
+      .catch((error) => {
+        resultsDir += " (1)";
+      });
+  }
+  return resultsDir;
 }
