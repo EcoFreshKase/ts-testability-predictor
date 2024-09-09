@@ -1,5 +1,5 @@
 import { AnalyzedFile, runFta as runFtaOld } from "fta-cli";
 
 export function runFta(projectPath: string): AnalyzedFile[] {
-  return runFtaOld(projectPath, { json: true });
+  return JSON.parse(runFtaOld(projectPath, { json: true }));
 }

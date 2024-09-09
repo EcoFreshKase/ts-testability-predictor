@@ -17,13 +17,13 @@ async function main() {
   let projectsAnalysis = [];
   let projectDir = await downloadDir;
 
-  for (let project of await readdir(await projectDir)) {
+  for (let project of await readdir(projectDir)) {
     const projectAnalysis = runFta(projectDir + "/" + project);
 
     projectsAnalysis.push(
       writeFile(
         `${resultsDir}/${project}.json`,
-        JSON.stringify(projectAnalysis)
+        JSON.stringify(projectAnalysis, null, 4)
       )
     );
   }
