@@ -1,5 +1,9 @@
 import assert from "assert";
-import { createResultDir, downloadProjects } from "../../main/lib/projectUtils";
+import {
+  createResultDir,
+  downloadProjects,
+  getGitURLs,
+} from "../../main/lib/projectUtils";
 import fs from "fs";
 import { dirSync } from "tmp";
 
@@ -37,6 +41,15 @@ describe("projectUtils", () => {
       assert.equal(resultDir, `${tmpDir.name}/results (1)`);
 
       assert.notStrictEqual(resultDir, resultDir2);
+    });
+  });
+  describe("getGitURLs", () => {
+    it("should return an array of git URLs", async () => {
+      const amtOfProjects = 10;
+      const gitUrls = await getGitURLs(amtOfProjects);
+      assert.ok(gitUrls);
+      assert.equal(gitUrls.length, amtOfProjects);
+      gitUrls.every((url) => assert.match(url, /https:\/\/*.git/));
     });
   });
 });

@@ -55,3 +55,35 @@ export async function createResultDir(path: string) {
   }
   return resultsDir;
 }
+
+/**
+ * Fetches the GitHub URLs of the most starred TypeScript projects.
+ *
+ * @param amtOfProjects - The number of projects to fetch. Must be between 1 and 100.
+ * @returns A promise that resolves to an array of GitHub URLs.
+ * @throws Will throw an error if the amount of projects is not between 1 and 100.
+ */
+export async function getGitURLs(amtOfProjects: number): Promise<string[]> {
+  if (amtOfProjects < 1 && amtOfProjects > 100) {
+    throw new Error("The amount of projects must be between 1 and 100");
+  }
+
+  const { Octokit } = await import("@octokit/rest");
+
+  const octokit = new Octokit({});
+
+  return octokit.rest.search
+    .repos({
+      q: "language:typescript",
+      sort: "stars",
+      order: "desc",
+    })
+    .then((repos) => {
+      return repos.data.items
+        .slice(0, amtOfProjects)
+        .map((repo) => repo.clone_url);
+    })
+    .catch((err) => {
+      throw new Error(err);
+    });
+}
