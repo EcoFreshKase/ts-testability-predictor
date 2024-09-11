@@ -23,6 +23,21 @@ describe("projectUtils", () => {
 
       assert.deepStrictEqual(actualDirs.sort(), expectedDirs.sort());
     });
+
+    it("should throw an error if a project failed to be cloned", async () => {
+      let failed = false;
+      try {
+        await downloadProjects([
+          "https://github.com/EcoFreshKase/does-not-exist.git",
+        ]);
+      } catch (error) {
+        failed = true;
+        assert.ok(error);
+      }
+      if (!failed) {
+        assert.fail("Expected an error but didn't receive one.");
+      }
+    });
   });
   describe("createResultDir", () => {
     let tmpDir = dirSync();

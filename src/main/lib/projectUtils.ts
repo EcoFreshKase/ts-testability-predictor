@@ -1,14 +1,18 @@
 import { exec } from "child_process";
-import { mkdir } from "fs/promises";
+import { mkdir, access } from "fs/promises";
 import { dirSync } from "tmp";
 import { promisify } from "util";
 
 const execPromise = promisify(exec);
 
 /**
+ * Downloads multiple Git projects in parallel and stores them in a temporary directory.
  *
- * @param gitUrls
- * @returns The path to the temporary directory where the projects were downloaded
+ * @param gitUrls - An array of Git repository URLs to be cloned.
+ * @param log - A boolean flag to enable logging of the download process. Defaults to `false`.
+ * @returns A promise that resolves to the path of the temporary directory containing the cloned projects.
+ *
+ * @throws Will log an error message if any of the projects fail to download.
  */
 export async function downloadProjects(
   gitUrls: string[],
@@ -22,11 +26,24 @@ export async function downloadProjects(
       console.log(`Downloading project from ${gitUrl}`);
     }
 
-    return execPromise(`cd ${tmpDir.name} && git clone ${gitUrl}`);
+    // return execPromise(`cd ${tmpDir.name} && git clone ${gitUrl}`);
+    return (async () => {
+      await execPromise(`cd ${tmpDir.name} && git clone ${gitUrl}`);
+
+      const dirName = gitUrl.split("/").pop()?.replace(".git", "");
+      const dirPath = `${tmpDir.name}/${dirName}`;
+      await access(dirPath).catch((err) => {
+        console.log("threw error while cloning");
+        throw new Error(`Error while cloning ${gitUrl}`);
+      });
+      if (log) {
+        console.log(`successfully cloned: ${gitUrl}`);
+      }
+    })();
   });
 
   await Promise.all(clonePromises).catch((err) => {
-    console.error("Error downloading projects:", err);
+    throw new Error(err);
   });
   if (log) {
     console.log("All projects downloaded successfully.");
