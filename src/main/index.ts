@@ -41,19 +41,25 @@ async function filterResults() {
 
   for (let analysisResult of results) {
     const resultJSONs: AnalyzedFile[] = require(`../../results/${analysisResult}`);
+    let analysedFile: DataSetFile = {
+      project: analysisResult.replace(".json", ""),
+      filesAmt: resultJSONs.length,
+      files: [],
+    };
 
-    for (const result of resultJSONs)
-      finalResult.push({
-        project: analysisResult.replace(".json", ""),
-        file_name: result.file_name,
+    for (const result of resultJSONs) {
+      analysedFile.files.push({
+        fileName: result.file_name,
         cyclo: result.cyclo,
         commandAmt: result.halstead.total_operators,
         linesOfCode: result.line_count,
-        filesAmt: resultJSONs.length,
       });
+    }
+
+    finalResult.push(analysedFile);
   }
 
-  writeFile("./results/finalResult.json", JSON.stringify(finalResult, null, 4));
+  writeFile("./finalResult.json", JSON.stringify(finalResult, null, 4));
 }
 
 // main();

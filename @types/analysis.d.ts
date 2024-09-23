@@ -1,11 +1,12 @@
-type DataSet = {
-  // meta data
+type DataSetFile = {
   project: string;
-  file_name: string;
-
-  // analysis data
-  cyclo: number;
-  commandAmt: number;
-  linesOfCode: number;
   filesAmt: number;
-}[];
+  files: {
+    fileName: string;
+    cyclo: number;
+    commandAmt: number;
+    linesOfCode: number;
+  }[];
+};
+
+type DataSet = DataSetFile[];
